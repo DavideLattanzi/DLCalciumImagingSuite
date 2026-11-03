@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as below."
+authors:
+  - family-names: "Lattanzi"
+    given-names: "Davide"
+  - family-names: "Sartini"
+    given-names: "Stefano"
+  - family-names: "Montesi"
+    given-names: "Ludovica"
+  - family-names: "Sartini"
+    given-names: "Alice"
+  - family-names: "Api"
+    given-names: "Giulia"
+  - family-names: "Zanchini"
+    given-names: "Irene"
+  - family-names: "Rauti"
+    given-names: "Rossana"
+title: "DLCalciumImagingSuite (DL-CIS): An open-source application for calcium imaging analysis of spontaneous transients and network synchrony"
+version: "1.0.0"
+date-released: 2026-11-03
+repository-code: "https://github.com/DavideLattanzi/DLCalciumImagingSuite"
+keywords:
+  - calcium imaging
+  - neuroscience
+  - transient kinetics
+  - network synchrony
+  - fluorescence analysis
+  - pyqt6

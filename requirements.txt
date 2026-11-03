@@ -1,0 +1,13 @@
+numpy
+scipy
+pandas
+opencv-python
+tifffile
+nd2
+matplotlib
+seaborn
+reportlab
+PyQt6
+pyqtgraph
+openpyxl
+pytest
