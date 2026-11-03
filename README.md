@@ -1,4 +1,5 @@
 # DLCalciumImagingSuite (DL-CIS) 🧠⚡
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23915223.svg)](https://doi.org/10.5281/zenodo.23915223)
 
 An open-source, standalone GUI application for calcium imaging analysis of spontaneous transients, kinetics, and ensemble network synchrony across diverse cell preparations.
 
@@ -38,5 +39,10 @@ An open-source, standalone GUI application for calcium imaging analysis of spont
 ```bash
    git clone \\\[https://github.com/DavideLattanzi/DLCalciumImagingSuite.git](https://github.com/tuo-username/DLCalciumImagingSuite.git)
    cd DLCalciumImagingSuite
+
+### How to Cite
+If you use **DLCalciumImagingSuite (DL-CIS)** in your research, please cite it as:
+
+> Lattanzi, D., Sartini, S., Montesi, L., Sartini, A., Api, G., Zanchini, I., & Rauti, R. (2026). *DLCalciumImagingSuite (DL-CIS): An open-source application for calcium imaging analysis of spontaneous transients and network synchrony*. Zenodo. https://doi.org/10.5281/zenodo.23915223
 
 
