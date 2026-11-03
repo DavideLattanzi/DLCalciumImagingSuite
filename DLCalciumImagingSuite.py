@@ -36,7 +36,7 @@ from PyQt6.QtWidgets import (
     QScrollArea, QDialog, QTextEdit, QTableWidget, QTableWidgetItem, QHeaderView, QRadioButton,
     QListWidget, QAbstractItemView, QColorDialog
 )
-from PyQt6.QtGui import QPixmap, QFont, QColor
+from PyQt6.QtGui import QPixmap, QFont, QColor, QIcon
 from PyQt6.QtCore import Qt, pyqtSignal
 import pyqtgraph as pg
 
@@ -47,8 +47,12 @@ CONFIG_FILE = "config.txt"
 # ==============================================================================
 LEAD_AUTHOR = "Davide Lattanzi"
 CO_AUTHORS = [
-    # "Colleague Name 1",
-    # "Colleague Name 2",
+    "Stefano Sartini",
+    "Ludovica Montesi",
+    "Alice Sartini",
+    "Giulia Api",
+    "Irene Zanchini",
+    "Rossana Rauti",
 ]
 
 
@@ -138,7 +142,7 @@ class HelpGuideDialog(QDialog):
         <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #1e293b;'>
         <h1 style='color: #0f172a; text-align: center; margin-bottom: 2px;'>Calcium Imaging Suite</h1>
         <h3 style='color: #2563eb; text-align: center; margin-top: 0px;'>Comprehensive Technical Manual, User Workflow & Analytical Formulations</h3>
-        <p style='text-align: center; font-size: 13px;'>{authors_html}</p>
+        <p style='text-align: center; font-size: 13px; background-color: #f1f5f9; padding: 8px; border-radius: 6px;'>{authors_html}</p>
         <hr style='border: 1px solid #cbd5e1;'>
 
         <h2 style='color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 4px;'>PART 1: OPERATIONAL USER WORKFLOW</h2>
@@ -231,6 +235,9 @@ class CalciumFluorescenceApp(QMainWindow):
         self.setWindowTitle(f"Calcium Imaging Suite - {LEAD_AUTHOR}")
         self.resize(1500, 980)
 
+        if os.path.exists("Icona1.ico"):
+            self.setWindowIcon(QIcon("Icona1.ico"))
+
         self.stack = None
         self.current_stack_path = None
         self.last_dir = ""  
@@ -270,66 +277,75 @@ class CalciumFluorescenceApp(QMainWindow):
         widget.setStyleSheet("background-color: #0b0f19; color: #ffffff;")
         layout = QHBoxLayout(widget)
 
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
+
         left_panel = QFrame()
-        left_panel.setStyleSheet("background-color: #0d1322; padding: 30px; border-radius: 10px;")
+        left_panel.setStyleSheet("background-color: #0d1322; padding: 20px; border-radius: 10px;")
         left_layout = QVBoxLayout(left_panel)
+        left_layout.setSpacing(10)
 
         tag_label = QLabel("CALCIUM IMAGING SUITE")
         tag_label.setStyleSheet("color: #64b5f6; font-weight: bold; font-size: 11px;")
         left_layout.addWidget(tag_label)
 
         title = QLabel("Fluorescence Calcium\nAnalyzer")
-        title.setFont(QFont("Arial", 26, QFont.Weight.Bold))
-        title.setStyleSheet("color: #ffffff; margin-top: 10px;")
+        title.setFont(QFont("Arial", 24, QFont.Weight.Bold))
+        title.setStyleSheet("color: #ffffff; margin-top: 5px;")
         left_layout.addWidget(title)
 
         subtitle = QLabel("Advanced analytical platform for calcium wave propagation mapping, event correlation, and transient kinetics.")
-        subtitle.setStyleSheet("color: #94a3b8; font-size: 13px; margin-top: 5px;")
+        subtitle.setStyleSheet("color: #94a3b8; font-size: 12px; margin-top: 2px;")
         subtitle.setWordWrap(True)
         left_layout.addWidget(subtitle)
 
         dev_box = QFrame()
-        dev_box.setStyleSheet("background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; margin-top: 15px;")
+        dev_box.setStyleSheet("background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; margin-top: 10px;")
         dev_layout = QVBoxLayout(dev_box)
+        dev_layout.setSpacing(4)
 
         dev_title = QLabel("DEVELOPER & TEAM")
         dev_title.setStyleSheet("color: #64748b; font-weight: bold; font-size: 10px;")
-        
-        dev_name = QLabel(LEAD_AUTHOR)
-        dev_name.setFont(QFont("Arial", 15, QFont.Weight.Bold))
-        dev_name.setStyleSheet("color: #4fc3f7;")
         dev_layout.addWidget(dev_title)
+
+        dev_name = QLabel(f"Lead Author: {LEAD_AUTHOR}")
+        dev_name.setFont(QFont("Arial", 13, QFont.Weight.Bold))
+        dev_name.setStyleSheet("color: #4fc3f7;")
         dev_layout.addWidget(dev_name)
 
         if CO_AUTHORS:
-            co_authors_label = QLabel("Co-authors: " + ", ".join(CO_AUTHORS))
-            co_authors_label.setStyleSheet("color: #94a3b8; font-size: 11px; font-weight: bold;")
+            co_authors_label = QLabel("<b>Co-Authors & Collaborators:</b><br>" + "<br>• ".join([""] + CO_AUTHORS))
+            co_authors_label.setStyleSheet("color: #cbd5e1; font-size: 11px; margin-top: 4px;")
+            co_authors_label.setWordWrap(True)
             dev_layout.addWidget(co_authors_label)
 
         info_text = QLabel(
-            "<b>Key Features:</b><br>"
+            "<br><b>Key Features:</b><br>"
             "• Continuous Pearson & Discrete Event Coincidence Rate (ECR)<br>"
             "• Top 3 Peak-Coincidence HUB Neurons Identification<br>"
             "• Per-Peak Interactive Measurement Cursors for Accurate AUC<br>"
             "• Linear Rise Slope & Exponential Tau Fit Overlays<br>"
             "• PDF Summary Report Export with Figures & Metrics"
         )
-        info_text.setStyleSheet("color: #cbd5e1; font-size: 12px; line-height: 1.3; margin-top: 6px;")
+        info_text.setStyleSheet("color: #94a3b8; font-size: 11px; line-height: 1.3;")
+        info_text.setWordWrap(True)
         dev_layout.addWidget(info_text)
 
         left_layout.addWidget(dev_box)
-        left_layout.addStretch()
 
         btn_start = QPushButton("🚀 Launch Software")
         btn_start.setStyleSheet("""
             QPushButton {
-                background-color: #1565c0; color: white; font-size: 15px; font-weight: bold;
-                padding: 12px; border-radius: 6px; border: none;
+                background-color: #1565c0; color: white; font-size: 14px; font-weight: bold;
+                padding: 10px; border-radius: 6px; border: none; margin-top: 10px;
             }
             QPushButton:hover { background-color: #1e88e5; }
         """)
         btn_start.clicked.connect(lambda: self.central_stacked.setCurrentIndex(1))
         left_layout.addWidget(btn_start)
+
+        scroll_area.setWidget(left_panel)
 
         right_panel = QVBoxLayout()
         self.img_label = QLabel()
@@ -351,7 +367,7 @@ class CalciumFluorescenceApp(QMainWindow):
         right_panel.addWidget(self.img_label, stretch=1)
         right_panel.addWidget(btn_change_photo)
 
-        layout.addWidget(left_panel, stretch=2)
+        layout.addWidget(scroll_area, stretch=2)
         layout.addLayout(right_panel, stretch=3)
 
         return widget
@@ -371,7 +387,7 @@ class CalciumFluorescenceApp(QMainWindow):
                 self.img_label.setPixmap(pixmap.scaled(550, 550, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
                 return
 
-        for img_name in ["neuroni.png", "neuroni.jpg", "neuroni.jpeg"]:
+        for img_name in ["MAX_rep30min.jpg", "neuroni.png", "neuroni.jpg", "neuroni.jpeg"]:
             if os.path.exists(img_name):
                 pixmap = QPixmap(img_name)
                 if not pixmap.isNull():
@@ -2245,7 +2261,7 @@ class CalciumFluorescenceApp(QMainWindow):
             label.setPos(pos.x() + size.x() / 2, pos.y() + size.y() / 2)
 
     # ==============================================================================
-    # METODO ORIGINALE RIPRISTINATO: ESTRAZIONE INTENSITÀ MEDIA ROI
+    # ESTRAZIONE INTENSITÀ MEDIA ROI
     # ==============================================================================
     def get_roi_mean_trace(self, roi):
         pos = roi.pos()
@@ -2291,7 +2307,7 @@ class CalciumFluorescenceApp(QMainWindow):
             return trace
 
     # ==============================================================================
-    # METODO ORIGINALE RIPRISTINATO: CALCOLO DELLE TRACCE E DEI PICCHI
+    # CALCOLO DELLE TRACCE E DEI PICCHI
     # ==============================================================================
     def calculate_data(self):
         if self.stack is None or not self.rois:
