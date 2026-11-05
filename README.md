@@ -1,5 +1,5 @@
 # DLCalciumImagingSuite (DL-CIS) 🧠⚡
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23915223.svg)](https://doi.org/10.5281/zenodo.23915223)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23973165.svg)](https://doi.org/10.5281/zenodo.23973165)
 
 An open-source, standalone GUI application for calcium imaging analysis of spontaneous transients, kinetics, and ensemble network synchrony across diverse cell preparations.
 
