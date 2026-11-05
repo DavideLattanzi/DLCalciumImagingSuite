@@ -34,7 +34,7 @@ from PyQt6.QtWidgets import (
     QPushButton, QFileDialog, QDoubleSpinBox, QSpinBox, QFormLayout, QGroupBox, 
     QComboBox, QMessageBox, QLabel, QStackedWidget, QFrame, QMenu, QSlider, QCheckBox,
     QScrollArea, QDialog, QTextEdit, QTableWidget, QTableWidgetItem, QHeaderView, QRadioButton,
-    QListWidget, QAbstractItemView, QColorDialog
+    QListWidget, QAbstractItemView, QColorDialog, QSizePolicy
 )
 from PyQt6.QtGui import QPixmap, QFont, QColor, QIcon
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -154,7 +154,7 @@ class HelpGuideDialog(QDialog):
             <li><b>Step 3: Background ROI Placement (BG):</b> Click <i>Set Background ROI</i> and position the white dashed rectangular box over a non-fluorescent, cell-free region. The average frame-by-frame intensity of this region will be subtracted to eliminate background noise.</li>
             <li><b>Step 4: Neuronal ROI Selection:</b> Click directly on active cell somata in the main image view. Interactive circular ROIs with customizable scaling handles will be placed and numbered.</li>
             <li><b>Step 5: Optional Bleach Correction:</b> If your time-series exhibits dye photobleaching, toggle <i>Apply Bleach Correction</i> to fit and compensate for baseline intensity decay over time.</li>
-            <li><b>Step 6: Resting Baseline Window Definition (F0):</b> Specify resting-state frame bounds (e.g., frames 1 to 20) to compute relative signal changes (dF / F0).</li>
+            <li><b>Step 6: Resting Baseline Window & Frame Range Definition:</b> Specify analysis frame bounds and resting-state baseline bounds to compute relative signal changes (dF / F0).</li>
             <li><b>Step 7: Robust Peak Segmentation (MAD Filter):</b> Adjust <i>Noise Threshold (x MAD sigma)</i>, <i>Min Duration</i>, and <i>Min Prominence</i> to segment real biological transients while filtering out baseline noise.</li>
             <li><b>Step 8: Advanced Transient Kinetics Analysis:</b> Navigate to the <i>Advanced Peak Kinetics</i> panel. Align transient waveforms, toggle <b>interactive measurement cursors</b> (vertical green/red dashed lines and horizontal yellow baseline line), and inspect overlaid linear and exponential fits.</li>
             <li><b>Step 9: Data & Summary Report Export:</b> Export individual peak kinetics tables to Excel/CSV, or generate a complete executive PDF Summary Report including network synchrony heatmaps and ensemble mean traces.</li>
@@ -276,47 +276,47 @@ class CalciumFluorescenceApp(QMainWindow):
         widget = QWidget()
         widget.setStyleSheet("background-color: #0b0f19; color: #ffffff;")
         layout = QHBoxLayout(widget)
-
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
+        layout.setContentsMargins(15, 15, 15, 15)
+        layout.setSpacing(15)
 
         left_panel = QFrame()
-        left_panel.setStyleSheet("background-color: #0d1322; padding: 20px; border-radius: 10px;")
+        left_panel.setStyleSheet("background-color: #0d1322; padding: 12px; border-radius: 10px;")
         left_layout = QVBoxLayout(left_panel)
-        left_layout.setSpacing(10)
+        left_layout.setContentsMargins(10, 10, 10, 10)
+        left_layout.setSpacing(6)
 
         tag_label = QLabel("CALCIUM IMAGING SUITE")
         tag_label.setStyleSheet("color: #64b5f6; font-weight: bold; font-size: 11px;")
         left_layout.addWidget(tag_label)
 
         title = QLabel("Fluorescence Calcium\nAnalyzer")
-        title.setFont(QFont("Arial", 24, QFont.Weight.Bold))
-        title.setStyleSheet("color: #ffffff; margin-top: 5px;")
+        title.setFont(QFont("Arial", 20, QFont.Weight.Bold))
+        title.setStyleSheet("color: #ffffff;")
         left_layout.addWidget(title)
 
         subtitle = QLabel("Advanced analytical platform for calcium wave propagation mapping, event correlation, and transient kinetics.")
-        subtitle.setStyleSheet("color: #94a3b8; font-size: 12px; margin-top: 2px;")
+        subtitle.setStyleSheet("color: #94a3b8; font-size: 11px;")
         subtitle.setWordWrap(True)
         left_layout.addWidget(subtitle)
 
         dev_box = QFrame()
-        dev_box.setStyleSheet("background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; margin-top: 10px;")
+        dev_box.setStyleSheet("background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px;")
         dev_layout = QVBoxLayout(dev_box)
-        dev_layout.setSpacing(4)
+        dev_layout.setContentsMargins(6, 6, 6, 6)
+        dev_layout.setSpacing(2)
 
         dev_title = QLabel("DEVELOPER & TEAM")
-        dev_title.setStyleSheet("color: #64748b; font-weight: bold; font-size: 10px;")
+        dev_title.setStyleSheet("color: #64748b; font-weight: bold; font-size: 9px;")
         dev_layout.addWidget(dev_title)
 
         dev_name = QLabel(f"Lead Author: {LEAD_AUTHOR}")
-        dev_name.setFont(QFont("Arial", 13, QFont.Weight.Bold))
+        dev_name.setFont(QFont("Arial", 11, QFont.Weight.Bold))
         dev_name.setStyleSheet("color: #4fc3f7;")
         dev_layout.addWidget(dev_name)
 
         if CO_AUTHORS:
             co_authors_label = QLabel("<b>Co-Authors & Collaborators:</b><br>" + "<br>• ".join([""] + CO_AUTHORS))
-            co_authors_label.setStyleSheet("color: #cbd5e1; font-size: 11px; margin-top: 4px;")
+            co_authors_label.setStyleSheet("color: #cbd5e1; font-size: 10px; margin-top: 2px;")
             co_authors_label.setWordWrap(True)
             dev_layout.addWidget(co_authors_label)
 
@@ -328,7 +328,7 @@ class CalciumFluorescenceApp(QMainWindow):
             "• Linear Rise Slope & Exponential Tau Fit Overlays<br>"
             "• PDF Summary Report Export with Figures & Metrics"
         )
-        info_text.setStyleSheet("color: #94a3b8; font-size: 11px; line-height: 1.3;")
+        info_text.setStyleSheet("color: #94a3b8; font-size: 10px; line-height: 1.2;")
         info_text.setWordWrap(True)
         dev_layout.addWidget(info_text)
 
@@ -338,18 +338,20 @@ class CalciumFluorescenceApp(QMainWindow):
         btn_start.setStyleSheet("""
             QPushButton {
                 background-color: #1565c0; color: white; font-size: 14px; font-weight: bold;
-                padding: 10px; border-radius: 6px; border: none; margin-top: 10px;
+                padding: 10px; border-radius: 6px; border: none; margin-top: 5px;
             }
             QPushButton:hover { background-color: #1e88e5; }
         """)
         btn_start.clicked.connect(lambda: self.central_stacked.setCurrentIndex(1))
         left_layout.addWidget(btn_start)
 
-        scroll_area.setWidget(left_panel)
-
         right_panel = QVBoxLayout()
+        right_panel.setContentsMargins(0, 0, 0, 0)
+        right_panel.setSpacing(8)
+
         self.img_label = QLabel()
         self.img_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.img_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.img_label.setStyleSheet("border: 1px dashed rgba(255,255,255,0.2); border-radius: 10px; background-color: #050810;")
         
         self.load_welcome_image()
@@ -357,8 +359,8 @@ class CalciumFluorescenceApp(QMainWindow):
         btn_change_photo = QPushButton("📷 Select / Change Custom Neurons Photo")
         btn_change_photo.setStyleSheet("""
             QPushButton {
-                background-color: #263238; color: #b0bec5; font-size: 12px; font-weight: bold;
-                padding: 8px; border-radius: 5px; border: 1px solid #37474f;
+                background-color: #263238; color: #b0bec5; font-size: 11px; font-weight: bold;
+                padding: 6px; border-radius: 5px; border: 1px solid #37474f;
             }
             QPushButton:hover { background-color: #37474f; color: white; }
         """)
@@ -367,7 +369,7 @@ class CalciumFluorescenceApp(QMainWindow):
         right_panel.addWidget(self.img_label, stretch=1)
         right_panel.addWidget(btn_change_photo)
 
-        layout.addWidget(scroll_area, stretch=2)
+        layout.addWidget(left_panel, stretch=2)
         layout.addLayout(right_panel, stretch=3)
 
         return widget
@@ -384,14 +386,14 @@ class CalciumFluorescenceApp(QMainWindow):
         if saved_path and os.path.exists(saved_path):
             pixmap = QPixmap(saved_path)
             if not pixmap.isNull():
-                self.img_label.setPixmap(pixmap.scaled(550, 550, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+                self.img_label.setPixmap(pixmap.scaled(500, 500, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
                 return
 
         for img_name in ["MAX_rep30min.jpg", "neuroni.png", "neuroni.jpg", "neuroni.jpeg"]:
             if os.path.exists(img_name):
                 pixmap = QPixmap(img_name)
                 if not pixmap.isNull():
-                    self.img_label.setPixmap(pixmap.scaled(550, 550, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+                    self.img_label.setPixmap(pixmap.scaled(500, 500, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
                     return
 
         pixmap = QPixmap(500, 500)
@@ -404,7 +406,7 @@ class CalciumFluorescenceApp(QMainWindow):
             self.last_dir = os.path.dirname(file_path)
             pixmap = QPixmap(file_path)
             if not pixmap.isNull():
-                self.img_label.setPixmap(pixmap.scaled(550, 550, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+                self.img_label.setPixmap(pixmap.scaled(500, 500, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
                 with open(CONFIG_FILE, "w") as f:
                     f.write(file_path)
 
@@ -546,9 +548,21 @@ class CalciumFluorescenceApp(QMainWindow):
         bleach_group.setLayout(bleach_layout)
         control_panel.addWidget(bleach_group)
 
-        f0_group = QGroupBox("Baseline Window (F0)")
+        f0_group = QGroupBox("Baseline Window (F0) & Frame Range")
         f0_layout = QFormLayout()
         
+        self.spin_analysis_start = NoWheelSpinBox()
+        self.spin_analysis_start.setRange(1, 10000)
+        self.spin_analysis_start.setValue(1)
+        self.spin_analysis_start.setMinimumHeight(26)
+        self.spin_analysis_start.valueChanged.connect(self.update_all_traces)
+
+        self.spin_analysis_end = NoWheelSpinBox()
+        self.spin_analysis_end.setRange(1, 10000)
+        self.spin_analysis_end.setValue(100)
+        self.spin_analysis_end.setMinimumHeight(26)
+        self.spin_analysis_end.valueChanged.connect(self.update_all_traces)
+
         self.spin_f0_start = NoWheelSpinBox()
         self.spin_f0_start.setRange(1, 10000)
         self.spin_f0_start.setValue(1)
@@ -561,6 +575,8 @@ class CalciumFluorescenceApp(QMainWindow):
         self.spin_f0_end.setMinimumHeight(26)
         self.spin_f0_end.valueChanged.connect(self.update_all_traces)
 
+        f0_layout.addRow("Analysis Start Frame:", self.spin_analysis_start)
+        f0_layout.addRow("Analysis End Frame:", self.spin_analysis_end)
         f0_layout.addRow("F0 Start Frame:", self.spin_f0_start)
         f0_layout.addRow("F0 End Frame:", self.spin_f0_end)
         f0_group.setLayout(f0_layout)
@@ -1367,10 +1383,35 @@ class CalciumFluorescenceApp(QMainWindow):
                         event_corr[i, j] = inter / union if union > 0 else 0.0
             
             mask_offdiag = ~np.eye(num_active_nodes, dtype=bool)
-            mean_network_coincidence = np.mean(event_corr[mask_offdiag])
+            mean_jaccard = np.mean(event_corr[mask_offdiag])
         else:
-            mean_network_coincidence = 0.0
+            mean_jaccard = 0.0
             event_corr = np.ones((1, 1))
+
+        num_rois_total = len(data['rois_data'])
+        if num_rois_total >= 2:
+            df_dict = {r['name']: r['df_f0'] for r in data['rois_data']}
+            df_matrix = pd.DataFrame(df_dict)
+            c_matrix = df_matrix.corr().values
+            mask_c = ~np.eye(num_rois_total, dtype=bool)
+            mean_pearson = np.nanmean(c_matrix[mask_c])
+
+            ecr_mat = np.zeros((num_active_nodes, num_active_nodes))
+            peaks_list = [r['peaks_indices'] for r in data['rois_data'] if len(r['peaks_indices']) > 0]
+            for i in range(num_active_nodes):
+                for j in range(num_active_nodes):
+                    if i == j:
+                        ecr_mat[i, j] = 1.0
+                    else:
+                        pA, pB = peaks_list[i], peaks_list[j]
+                        cA = sum(1 for pa in pA if np.any(np.abs(pB - pa) <= w_frames))
+                        cB = sum(1 for pb in pB if np.any(np.abs(pA - pb) <= w_frames))
+                        denom = min(len(pA), len(pB))
+                        ecr_mat[i, j] = min(cA, cB) / denom if denom > 0 else 0.0
+            mean_ecr = np.mean(ecr_mat[mask_offdiag]) if num_active_nodes >= 2 else 0.0
+        else:
+            mean_pearson = 0.0
+            mean_ecr = 0.0
 
         fig_hm, ax_hm = plt.subplots(figsize=(5.5, 4.5))
         sns.heatmap(event_corr, cmap=self.combo_cmap.currentText(), vmin=0, vmax=1, ax=ax_hm, cbar=True,
@@ -1483,16 +1524,19 @@ class CalciumFluorescenceApp(QMainWindow):
         elements.append(Spacer(1, 10))
 
         sync_box_data = [
-            [Paragraph(f"<b>AVERAGE NETWORK PEAK COINCIDENCE INDEX (JACCARD):</b>", ParagraphStyle('P1', fontName='Helvetica-Bold', fontSize=10, textColor=colors.HexColor('#065f46'))),
-             Paragraph(f"<b>{mean_network_coincidence:.4f}</b>", ParagraphStyle('P2', fontName='Helvetica-Bold', fontSize=14, textColor=colors.HexColor('#047857'), alignment=2))]
+            [Paragraph(f"<b>Correlation Method</b>", ParagraphStyle('H1', fontName='Helvetica-Bold', fontSize=10, textColor=colors.HexColor('#065f46'))),
+             Paragraph(f"<b>Mean Correlation Value</b>", ParagraphStyle('H2', fontName='Helvetica-Bold', fontSize=10, textColor=colors.HexColor('#065f46'), alignment=2))],
+            [Paragraph("Continuous Pearson Correlation (r)", ParagraphStyle('P1', fontName='Helvetica', fontSize=9)), Paragraph(f"{mean_pearson:.4f}", ParagraphStyle('P1_v', fontName='Helvetica-Bold', fontSize=9, alignment=2))],
+            [Paragraph("Event Coincidence Rate (ECR)", ParagraphStyle('P2', fontName='Helvetica', fontSize=9)), Paragraph(f"{mean_ecr:.4f}", ParagraphStyle('P2_v', fontName='Helvetica-Bold', fontSize=9, alignment=2))],
+            [Paragraph("Discrete Peak Coincidence Index (Jaccard)", ParagraphStyle('P3', fontName='Helvetica', fontSize=9)), Paragraph(f"{mean_jaccard:.4f}", ParagraphStyle('P3_v', fontName='Helvetica-Bold', fontSize=9, alignment=2))]
         ]
-        sync_table = Table(sync_box_data, colWidths=[400, 140])
+        sync_table = Table(sync_box_data, colWidths=[360, 180])
         sync_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#d1fae5')),
-            ('PADDING', (0, 0), (-1, -1), 8),
+            ('PADDING', (0, 0), (-1, -1), 6),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#10b981')),
-            ('ROUNDEDCORNERS', [4, 4, 4, 4])
+            ('LINEBELOW', (0, 0), (-1, 0), 1, colors.HexColor('#10b981'))
         ]))
         elements.append(sync_table)
         elements.append(Spacer(1, 10))
@@ -1749,7 +1793,9 @@ class CalciumFluorescenceApp(QMainWindow):
             QMessageBox.warning(self, "Warning", "At least 2 active ROIs are required to identify HUB neurons.")
             return
 
-        num_frames = len(self.stack)
+        start_f = max(0, self.spin_analysis_start.value() - 1)
+        end_f = min(len(self.stack), self.spin_analysis_end.value())
+        num_frames = end_f - start_f
         w_frames = self.spin_coincidence_window.value()
 
         bin_matrix = []
@@ -1760,9 +1806,9 @@ class CalciumFluorescenceApp(QMainWindow):
             if len(p_indices) > 0:
                 binary_vector = np.zeros(num_frames, dtype=float)
                 for p in p_indices:
-                    start_f = max(0, p - w_frames)
-                    end_f = min(num_frames, p + w_frames + 1)
-                    binary_vector[start_f:end_f] = 1.0
+                    st = max(0, p - w_frames)
+                    en = min(num_frames, p + w_frames + 1)
+                    binary_vector[st:en] = 1.0
 
                 bin_matrix.append(binary_vector)
                 active_rois_info.append({'idx': r_idx, 'name': r['name']})
@@ -1849,25 +1895,25 @@ class CalciumFluorescenceApp(QMainWindow):
         unit_idx = self.combo_time_unit.currentIndex()
 
         if unit_idx == 0:
-            x_frame = int(round(x_val / dt_ms))
+            rel_frame = int(round(x_val / dt_ms))
         elif unit_idx == 1:
-            x_frame = int(round(x_val / (dt_ms / 1000.0)))
+            rel_frame = int(round(x_val / (dt_ms / 1000.0)))
         else:
-            x_frame = int(round(x_val))
+            rel_frame = int(round(x_val))
 
         roi_info = data['rois_data'][roi_idx]
         current_peaks = [int(p) for p in roi_info['peaks_indices']]
 
         if event.button() == Qt.MouseButton.LeftButton and event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
-            if 0 <= x_frame < len(self.stack) and x_frame not in current_peaks:
-                current_peaks.append(int(x_frame))
+            if 0 <= rel_frame < len(roi_info['df_f0']) and rel_frame not in current_peaks:
+                current_peaks.append(int(rel_frame))
                 current_peaks.sort()
                 self.manual_peaks_override[roi_idx] = current_peaks
                 self.update_all_traces()
 
         elif event.button() == Qt.MouseButton.RightButton and event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
             for p in current_peaks:
-                if abs(p - x_frame) <= 6:
+                if abs(p - rel_frame) <= 6:
                     current_peaks.remove(p)
                     self.manual_peaks_override[roi_idx] = current_peaks
                     self.update_all_traces()
@@ -1927,6 +1973,10 @@ class CalciumFluorescenceApp(QMainWindow):
 
             max_proj = np.max(self.stack, axis=0)
             self.img_item.setImage(max_proj, axisOrder='row-major')
+
+            self.spin_analysis_start.setMaximum(num_frames)
+            self.spin_analysis_end.setMaximum(num_frames)
+            self.spin_analysis_end.setValue(num_frames)
 
             self.spin_f0_end.setMaximum(num_frames)
             self.spin_f0_start.setMaximum(num_frames)
@@ -2165,6 +2215,8 @@ class CalciumFluorescenceApp(QMainWindow):
         session_data = {
             'video_path': self.current_stack_path,
             'frame_interval_ms': float(self.spin_frame_interval_ms.value()),
+            'analysis_start': int(self.spin_analysis_start.value()),
+            'analysis_end': int(self.spin_analysis_end.value()),
             'f0_start': int(self.spin_f0_start.value()),
             'f0_end': int(self.spin_f0_end.value()),
             'noise_mult': float(self.spin_noise_mult.value()),
@@ -2219,6 +2271,8 @@ class CalciumFluorescenceApp(QMainWindow):
             self.clear_all_overlays()
 
             self.spin_frame_interval_ms.setValue(data.get('frame_interval_ms', 100.0))
+            self.spin_analysis_start.setValue(data.get('analysis_start', 1))
+            self.spin_analysis_end.setValue(data.get('analysis_end', len(self.stack)))
             self.spin_f0_start.setValue(data.get('f0_start', 1))
             self.spin_f0_end.setValue(data.get('f0_end', 20))
             self.spin_noise_mult.setValue(data.get('noise_mult', 0.5))
@@ -2263,7 +2317,7 @@ class CalciumFluorescenceApp(QMainWindow):
     # ==============================================================================
     # ESTRAZIONE INTENSITÀ MEDIA ROI
     # ==============================================================================
-    def get_roi_mean_trace(self, roi):
+    def get_roi_mean_trace(self, roi, start_frame, end_frame):
         pos = roi.pos()
         size = roi.size()
         x, y = int(pos.x()), int(pos.y())
@@ -2273,8 +2327,9 @@ class CalciumFluorescenceApp(QMainWindow):
         x0, y0 = max(0, x), max(0, y)
         x1, y1 = min(img_w, x + w), min(img_h, y + h)
 
+        sub_stack = self.stack[start_frame:end_frame]
         if x1 <= x0 or y1 <= y0:
-            return np.zeros(len(self.stack))
+            return np.zeros(len(sub_stack))
 
         if isinstance(roi, pg.RectROI):
             mask = np.ones((y1 - y0, x1 - x0), dtype=np.uint8)
@@ -2283,7 +2338,7 @@ class CalciumFluorescenceApp(QMainWindow):
             cv2.ellipse(mask, ((x1 - x0) // 2, (y1 - y0) // 2), ((x1 - x0) // 2, (y1 - y0) // 2), 0, 0, 360, 255, -1)
 
         mean_values = []
-        for frame in self.stack:
+        for frame in sub_stack:
             sub_img = frame[y0:y1, x0:x1]
             if mask.shape == sub_img.shape:
                 pts = sub_img[mask > 0]
@@ -2313,12 +2368,17 @@ class CalciumFluorescenceApp(QMainWindow):
         if self.stack is None or not self.rois:
             return None
 
-        bg_trace = self.get_roi_mean_trace(self.bg_roi) if self.bg_roi is not None else np.zeros(len(self.stack))
+        start_frame = max(0, self.spin_analysis_start.value() - 1)
+        end_frame = min(len(self.stack), self.spin_analysis_end.value())
+        if end_frame <= start_frame:
+            end_frame = start_frame + 1
+
+        bg_trace = self.get_roi_mean_trace(self.bg_roi, start_frame, end_frame) if self.bg_roi is not None else np.zeros(end_frame - start_frame)
         
-        f0_s = max(0, self.spin_f0_start.value() - 1)
-        f0_e = min(len(self.stack), self.spin_f0_end.value())
+        f0_s = max(0, self.spin_f0_start.value() - 1 - start_frame)
+        f0_e = min(end_frame - start_frame, self.spin_f0_end.value() - start_frame)
         if f0_e <= f0_s:
-            f0_e = f0_s + 1
+            f0_e = max(1, f0_s + 1)
 
         prominence = self.spin_prominence.value()
         distance = self.spin_distance.value()
@@ -2329,7 +2389,7 @@ class CalciumFluorescenceApp(QMainWindow):
         data_results = {'bg_trace': bg_trace, 'rois_data': []}
 
         for i, roi in enumerate(self.rois):
-            raw_trace = self.get_roi_mean_trace(roi)
+            raw_trace = self.get_roi_mean_trace(roi, start_frame, end_frame)
             
             if self.apply_bleach_corr:
                 raw_trace = self.apply_bleaching_correction(raw_trace)
@@ -2344,7 +2404,7 @@ class CalciumFluorescenceApp(QMainWindow):
             analysis_trace = df_f0_trace
 
             if i in self.manual_peaks_override:
-                peaks_df = np.array(self.manual_peaks_override[i], dtype=int)
+                peaks_df = np.array([p for p in self.manual_peaks_override[i] if 0 <= p < len(df_f0_trace)], dtype=int)
             else:
                 median_val = np.median(analysis_trace)
                 mad = np.median(np.abs(analysis_trace - median_val))
@@ -2399,7 +2459,8 @@ class CalciumFluorescenceApp(QMainWindow):
         filter_index = self.combo_roi_filter.currentIndex()
         colors = ['r', 'g', 'b', 'c', 'm', 'y']
 
-        x_axis, time_label = self.get_time_axis(len(self.stack))
+        num_pts = len(data['rois_data'][0]['df_f0']) if data['rois_data'] else 0
+        x_axis, time_label = self.get_time_axis(num_pts)
         self.plot_widget.setLabel('bottom', time_label)
 
         for i, roi_info in enumerate(data['rois_data']):
@@ -2616,7 +2677,9 @@ class CalciumFluorescenceApp(QMainWindow):
             return
 
         try:
-            num_frames = len(self.stack)
+            start_f = max(0, self.spin_analysis_start.value() - 1)
+            end_f = min(len(self.stack), self.spin_analysis_end.value())
+            num_frames = end_f - start_f
             w_frames = self.spin_coincidence_window.value()
 
             bin_matrix = []
@@ -2632,9 +2695,9 @@ class CalciumFluorescenceApp(QMainWindow):
 
                 binary_vector = np.zeros(num_frames, dtype=float)
                 for p in p_indices:
-                    start_f = max(0, p - w_frames)
-                    end_f = min(num_frames, p + w_frames + 1)
-                    binary_vector[start_f:end_f] = 1.0
+                    st = max(0, p - w_frames)
+                    en = min(num_frames, p + w_frames + 1)
+                    binary_vector[st:en] = 1.0
 
                 bin_matrix.append(binary_vector)
                 roi_names.append(r['name'])
@@ -2812,7 +2875,7 @@ class CalciumFluorescenceApp(QMainWindow):
 
         dt_ms = self.spin_frame_interval_ms.value()
         dt_sec = dt_ms / 1000.0
-        num_frames = len(self.stack)
+        num_frames = len(data['rois_data'][0]['df_f0']) if data['rois_data'] else 0
         total_time_sec = num_frames * dt_sec
         
         traces_dict = {

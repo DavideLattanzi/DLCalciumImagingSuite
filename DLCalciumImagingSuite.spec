@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['DLCalciumImagingSuite.py'],
+    ['dlcalciumimagingsuiteV4.py'],
     pathex=[],
     binaries=[],
     datas=[('Icona1.ico', '.'), ('MAX_rep30min.jpg', '.')],
