@@ -1,15 +1,17 @@
 # DLCalciumImagingSuite (DL-CIS) 🧠⚡
-<!-- Badges ufficiali con link alla Release -->
+<!-- Official Release Badges -->
 [![Latest Release](https://img.shields.io/github/v/release/davidelattanzi/DLCalciumImagingSuite?color=blue&label=Download%20v1.0.2)](https://github.com/davidelattanzi/DLCalciumImagingSuite/releases/latest)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23920548.svg)](https://doi.org/10.5281/zenodo.23920548)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-### 🚀 Quick Download
-Per scaricare l'eseguibile standalone per Windows (`.exe`) e i dataset di prova:
+### 🚀 Quick Download & Assets
+Download the standalone Windows application (`.exe`), sample `.nd2` datasets, and demonstration videos:
 
-👉 **[Scarica l'ultima release (v1.0.2)](https://github.com/davidelattanzi/DLCalciumImagingSuite/releases/latest)**
+👉 **[Download Latest Release (v1.0.4)](https://github.com/davidelattanzi/DLCalciumImagingSuite/releases/latest)**
+
+---
 
 ---
 
