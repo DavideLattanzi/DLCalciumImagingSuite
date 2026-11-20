@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "DLCalciumImagingSuite (DL-CIS): An open-source application for calcium imaging analysis of spontaneous transients and network synchrony"
-version: 5.0.0
+version: 1.0.5
 date-released: 2026-11-20
 license: MIT
 identifiers:
